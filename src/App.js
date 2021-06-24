@@ -6,6 +6,12 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [text, setText] = useState('');
 
+    const style = {
+    color: 'red',
+    fontSize:  '42px',
+    marginLeft: '50px'
+  }
+
   useEffect(async() => {
     await axios.get('http://localhost:8080/allTasks').then(res => {
       setTasks(res.data);
@@ -18,9 +24,24 @@ function App() {
       isCheck: false
     }).then(res => {
       setText('');
-      console.log(res.data);
+      setText(res.data);
     });
   };
+
+  const checkboxChange = async (index) => {
+    const { _id, isCheck } = tasks[index];
+    await axios.patch("http://localhost:8080/updateTask", {
+        _id,
+        isCheck: !isCheck,
+      }).then((res) => {
+        setTasks(res.data);
+      });
+  };
+
+  const deleteTask = async () => {
+    // await axios.delete('http://localhost:8080/deleteTask')
+  }
+  
   return (
     <div className='logo'>
       <header>
@@ -32,8 +53,13 @@ function App() {
         {
           tasks.map((task, index) => 
             <div key={`task-${index}`}>
-              <input type='checkbox' isCheck={task.isCheck} />
+              <input className="taskCheck"
+                type="checkbox"
+                checked={task.isCheck}
+                onChange={() => checkboxChange(index)}
+              />
               <span>{task.text}</span>
+              <span style={style} onClick={() => deleteTask()}>X</span>
             </div>
           )
         }
