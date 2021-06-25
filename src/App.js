@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import './App.css';
+import './App.scss';
 import axios from 'axios';
 
 function App() {
@@ -42,13 +42,16 @@ function App() {
     await axios.delete(`http://localhost:8080/deleteTask?_id=${tasks[index]._id}`).then((res) => {
       setTasks(res.data);
     });
-    }; //delete task
+  }; //delete task
   
   return (
     <div className='logo'>
       <header>
         <h1>To do list:</h1>
-        <input type='text' value={text} onChange={(e) => setText(e.target.value)} />
+        <input type='text'
+          placeholder='Enter your text...'
+          value={text}
+          onChange={(e) => setText(e.target.value)} />
         <button onClick={() => addNewTask()}>Add</button>
       </header>
       <div>
@@ -61,13 +64,13 @@ function App() {
                 onChange={() => checkboxChange(index)}
               />
               <span>{task.text}</span>
-              <span style={style} onClick={() => deleteTask(index)}>X</span>
+              <span className='delBtn' onClick={() => deleteTask(index)}>X</span>
             </div>
           )
         }
       </div>
     </div>
   );
-} //DOM
+}
 
 export default App;
