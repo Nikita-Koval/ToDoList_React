@@ -16,7 +16,7 @@ function App() {
     await axios.get('http://localhost:8080/allTasks').then(res => {
       setTasks(res.data);
     });
-  });
+  }); //get all tasks
 
   const addNewTask = async () => {
     await axios.post('http://localhost:8080/createTask', {
@@ -26,7 +26,7 @@ function App() {
       setText('');
       setText(res.data.data);
     });
-  };
+  }; //create task
 
   const checkboxChange = async (index) => {
     const { _id, isCheck } = tasks[index];
@@ -36,13 +36,13 @@ function App() {
       }).then((res) => {
         setTasks(res.data);
       });
-  };
+  }; //chenge checkbox
 
   const deleteTask = async (index) => {
     await axios.delete(`http://localhost:8080/deleteTask?_id=${tasks[index]._id}`).then((res) => {
       setTasks(res.data);
     });
-    };
+    }; //delete task
   
   return (
     <div className='logo'>
