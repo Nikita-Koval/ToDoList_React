@@ -23,7 +23,9 @@ module.exports.changeTask = (req, res) => {
   
 module.exports.deleteTask = (req, res) => {
     Task.deleteOne({_id: req.query._id}).then(result => {
-      res.send(result);
+      Task.find().then(result => {
+        res.send(result)
+      });
     });
 };
   

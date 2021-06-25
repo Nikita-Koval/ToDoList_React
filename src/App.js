@@ -24,7 +24,7 @@ function App() {
       isCheck: false
     }).then(res => {
       setText('');
-      setText(res.data);
+      setText(res.data.data);
     });
   };
 
@@ -38,9 +38,11 @@ function App() {
       });
   };
 
-  const deleteTask = async () => {
-    // await axios.delete('http://localhost:8080/deleteTask')
-  }
+  const deleteTask = async (index) => {
+    await axios.delete(`http://localhost:8080/deleteTask?_id=${tasks[index]._id}`).then((res) => {
+      setTasks(res.data);
+    });
+    };
   
   return (
     <div className='logo'>
@@ -59,7 +61,7 @@ function App() {
                 onChange={() => checkboxChange(index)}
               />
               <span>{task.text}</span>
-              <span style={style} onClick={() => deleteTask()}>X</span>
+              <span style={style} onClick={() => deleteTask(index)}>X</span>
             </div>
           )
         }

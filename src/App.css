@@ -30,6 +30,8 @@
 
 .logo {
   color: blue;
+  width: 400px;
+  margin: 0 auto;
 }
 
 @keyframes App-logo-spin {
