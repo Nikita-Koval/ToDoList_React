@@ -68,6 +68,6 @@ function App() {
       </div>
     </div>
   );
-}
+} //DOM
 
 export default App;
