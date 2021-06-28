@@ -39,14 +39,13 @@ const App = () => {
     }
   } //addingg by Enter
   
-
   const checkboxChange = async (index) => {
     const { _id, isCheck } = tasks[index];
     await axios.patch("http://localhost:8080/updateTask", {
-        _id,
-        isCheck: !isCheck
-      }).then((res) => {
-        setTasks(res.data);
+      _id,
+      isCheck: !isCheck
+    }).then((res) => {
+      setTasks(res.data);
       });
   }; //change checkbox
 
@@ -60,10 +59,10 @@ const App = () => {
     if(newText === '') {
       alert('Enter your text !') } else {
     await axios.patch("http://localhost:8080/updateTask", {
-        _id,
-        text: newText,
-      }).then((res) => {
-        setTasks(res.data);
+      _id,
+      text: newText,
+    }).then((res) => {
+      setTasks(res.data);
       });
     setIndex();
   }
@@ -84,7 +83,7 @@ const App = () => {
       <header>
         <h1>To do list:</h1>
         <div className='control'>
-        <input 
+          <input 
           type='text'
           placeholder='Enter your text...'
           className='inputText'
@@ -104,9 +103,9 @@ const App = () => {
             return indexEdit === index ? (
               <div className='textEdit' key={`task-${index}`}>
                 <input
-                  type="text"
-                  onChange={(e) => setNewText(e.target.value)}
-                  value={newText}
+                type="text"
+                onChange={(e) => setNewText(e.target.value)}
+                value={newText}
                 />
                 <img
                 src={accept}
@@ -122,27 +121,27 @@ const App = () => {
             className='wrapper'
             key={`task-${index}`}>
               <div className='taskCont'>
-              <input className="taskCheck"
+                <input className="taskCheck"
                 type="checkbox"
                 checked={task.isCheck}
                 onChange={() => checkboxChange(index)}
-              />
-              <span className={task.isCheck ? "doneTask" : "textTask"}>{task.text}</span>
-              <div className='imgCont'>
-              <img
-                src={dit}
-                onClick={() => editTask(index)}
-              />
-              <img
-                src={del}
-                onClick={() => deleteTask(index)}
-              />
-              </div>
+                />
+                <span className={task.isCheck ? "doneTask" : "textTask"}>{task.text}</span>
+                <div className='imgCont'>
+                  <img
+                  src={dit}
+                  onClick={() => editTask(index)}
+                  />
+                  <img
+                  src={del}
+                  onClick={() => deleteTask(index)}
+                  />
+                </div>
               </div>
             </div>
             )
       })
-        }
+    }
       </div>
     </div>
   );
