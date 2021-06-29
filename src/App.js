@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import './App.scss';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import EditingTask from './EditingTask';
+import GoodTask from './GoodTask';
+import './App.scss';
 
-function App() {
+const App = () => {
   const [tasks, setTasks] = useState([]);
   const [text, setText] = useState('');
+  const [indexEdit, setIndex] = useState(null);
+  const [newText, setNewText] = useState("");
 
-    const style = {
-    color: 'red',
-    fontSize:  '42px',
-    marginLeft: '50px'
-  }
+  tasks.sort((a, b) => a.isCheck - b.isCheck);
 
   useEffect(async() => {
     await axios.get('http://localhost:8080/allTasks').then(res => {
@@ -19,55 +19,63 @@ function App() {
   }); //get all tasks
 
   const addNewTask = async () => {
-    await axios.post('http://localhost:8080/createTask', {
-      text,
-      isCheck: false
-    }).then(res => {
-      setText('');
-      setText(res.data.data);
-    });
+    if(text === '') {
+      alert('Enter your text !') } else {
+        await axios.post('http://localhost:8080/createTask', {
+          text,
+          isCheck: false
+        }).then(res => {
+          setText(res.data);
+          setText('');
+        });
+  }
   }; //create task
 
-  const checkboxChange = async (index) => {
-    const { _id, isCheck } = tasks[index];
-    await axios.patch("http://localhost:8080/updateTask", {
-        _id,
-        isCheck: !isCheck,
-      }).then((res) => {
-        setTasks(res.data);
-      });
-  }; //chenge checkbox
-
-  const deleteTask = async (index) => {
-    await axios.delete(`http://localhost:8080/deleteTask?_id=${tasks[index]._id}`).then((res) => {
-      setTasks(res.data);
-    });
-  }; //delete task
+  const enterFunc = (event) => {
+    if(event.key === 'Enter'){
+      addNewTask()
+    }
+  } //adding by Enter
   
   return (
     <div className='logo'>
       <header>
         <h1>To do list:</h1>
-        <input type='text'
-          placeholder='Enter your text...'
-          value={text}
-          onChange={(e) => setText(e.target.value)} />
-        <button onClick={() => addNewTask()}>Add</button>
+        <div className='control'>
+          <input 
+            type='text'
+            placeholder='Enter your text...'
+            className='inputText'
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyPress={(event) => enterFunc(event)}
+          />
+          <button 
+            className='btnAdd'
+            onClick={() => addNewTask()}>Add</button>
+        </div>
       </header>
-      <div>
+
+      <div className='tasksCont'>
         {
-          tasks.map((task, index) => 
-            <div key={`task-${index}`}>
-              <input className="taskCheck"
-                type="checkbox"
-                checked={task.isCheck}
-                onChange={() => checkboxChange(index)}
-              />
-              <span>{task.text}</span>
-              <span className='delBtn' onClick={() => deleteTask(index)}>X</span>
-            </div>
-          )
-        }
+          tasks.map((task, index) => {
+            return indexEdit === index ? 
+            (<EditingTask 
+                key={`task-${index}`} 
+                index={index} 
+                task={task} 
+                setTasks={setTasks} 
+                setIndex={setIndex} />) 
+                : 
+            (<GoodTask 
+                key={`task-${index}`} 
+                index={index}  
+                task={task} 
+                setIndex={setIndex} 
+                setNewText={setNewText} 
+                setTasks={setTasks} />)
+      })
+    }
       </div>
     </div>
   );
